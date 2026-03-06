@@ -4,11 +4,14 @@
     <canvas ref="starCanvasRef" class="star-bg"></canvas>
 
     <!-- 顶部标题栏 -->
-    <header class="header">
-      <div class="header-line"></div>
-      <h1 class="header-title">九章智算云 AlayaNeW 算力全景</h1>
-      <span class="header-time">{{ currentTime }}</span>
-    </header>
+    <m-header title="九章智算云 AlayaNeW 算力全景" sub-text="AlayaNeW Computing Power Panorama">
+      <template v-slot:left>
+        <div class="m-header-weather"><span>晴</span><span>18℃</span></div>
+      </template>
+      <template v-slot:right>
+        <div class="m-header-date"><span>{{ currentTime }}</span></div>
+      </template>
+    </m-header>
 
     <!-- 主体内容 -->
     <div class="main">
@@ -95,6 +98,7 @@ import { useRouter } from 'vue-router'
 import World from '@/components/Earth/World.js'
 import { earth } from '@/config/dataset.js'
 import throttle from 'lodash/throttle'
+import mHeader from '@/components/mHeader/index.vue'
 
 const router = useRouter()
 const chartRef = ref()
@@ -217,7 +221,9 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+@import "@/assets/style/font.scss";
+
 .dashboard {
   width: 100%;
   height: 100%;
@@ -240,40 +246,18 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-.header {
+.dashboard .m-header {
   position: relative;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
   flex-shrink: 0;
-  padding: 0 40px;
+}
 
-  .header-line {
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    right: 5%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(67, 144, 209, 0.6), rgba(67, 144, 209, 0.8), rgba(67, 144, 209, 0.6), transparent);
-  }
-
-  .header-title {
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: 6px;
-    background: linear-gradient(180deg, #fff 0%, #8ec5e8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .header-time {
-    position: absolute;
-    right: 40px;
+.m-header-weather,
+.m-header-date {
+  span {
+    padding-right: 10px;
+    color: #c4f3fe;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 1px;
   }
 }
 
