@@ -4,6 +4,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/goofish-shop-earth-points/',
   plugins: [vue()],
   resolve:{
     alias:{
