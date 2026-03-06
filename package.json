@@ -9,11 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "autofit.js": "^3.2.8",
+    "d3-geo": "^3.1.1",
+    "delaunator": "^5.0.1",
+    "echarts": "^6.0.0",
     "gsap": "^3.12.5",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
+    "point-in-polygon": "^1.1.0",
     "three": "^0.162.0",
-    "vue": "^3.4.19"
+    "three.interactive": "^1.8.0",
+    "tiny-emitter": "^2.1.0",
+    "uuid": "^13.0.0",
+    "vue": "^3.4.19",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
