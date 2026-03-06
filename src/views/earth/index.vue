@@ -15,69 +15,25 @@
 
     <!-- 主体内容 -->
     <div class="main">
-      <!-- 左侧面板 -->
-      <aside class="left-panel">
-        <div class="glass-card">
-          <div class="company-header">
-            <h2 class="company-name">DataCanvas</h2>
-            <p class="company-sub">九章云极</p>
-          </div>
-          <p class="company-desc">
-            领先的人工智能基础设施与智算云提供商，构建完整的AIDC技术栈、智算操作系统及产业链。旗下九章智算云、九章智算操作系统等品牌，面向AI训练与推理提供高性能计算、云服务及AI软件，赋能广大开发者与企业客户。
-          </p>
-          <div class="tags">
-            <div class="tag-item">
-              <span class="tag-icon">◎</span>
-              <span>国家专精特新重点"小巨人"企业</span>
-            </div>
-            <div class="tag-item">
-              <span class="tag-icon">◎</span>
-              <span>普惠算力倡导者</span>
-            </div>
-            <div class="tag-item">
-              <span class="tag-icon">◎</span>
-              <span>首个算力按"度"计量标准</span>
-            </div>
-            <div class="tag-item">
-              <span class="tag-icon">◎</span>
-              <span>全球首个强化学习云平台</span>
-            </div>
-          </div>
-
-          <div class="cloud-diagram">
-            <div class="diagram-layers">
-              <div class="layer layer-top">
-                <span class="layer-label">1度电（1千瓦时耗电量）</span>
-              </div>
-              <div class="layer layer-mid">
-                <span class="layer-label">1度水（1立方米水）</span>
-              </div>
-              <div class="layer layer-bottom">
-                <span class="layer-label">1度燃气（1立方米天然气）</span>
-              </div>
-            </div>
-            <div class="diagram-arrow">
-              <div class="arrow-body">
-                <span class="arrow-text">1度算力</span>
-                <span class="arrow-sub">1算力=312TFlops·小时</span>
-              </div>
-            </div>
-            <div class="diagram-cloud">
-              <span class="cloud-text">智算云</span>
-            </div>
-          </div>
+      <!-- 左侧图表面板 -->
+      <div class="left-wrap">
+        <div class="left-wrap-3d">
+          <BulkCommoditySalesChart></BulkCommoditySalesChart>
+          <YearlyEconomyTrend></YearlyEconomyTrend>
+          <EconomicTrendChart></EconomicTrendChart>
+          <DistrictEconomicIncome></DistrictEconomicIncome>
         </div>
-      </aside>
+      </div>
 
-      <!-- 右侧地球区域 -->
-      <section class="right-section">
+      <!-- 中间地球区域 -->
+      <section class="center-section">
         <div class="earth-container" ref="chartRef"></div>
         <!-- 浙江省点位提示 -->
         <div class="zj-tooltip" v-show="zjTooltip.visible" :style="{ left: zjTooltip.x + 'px', top: zjTooltip.y + 'px' }">
           <span>浙江省</span>
           <small>点击进入</small>
         </div>
-        <!-- 数据指标卡片 -->
+        <!-- 底部数据指标卡片 -->
         <div class="data-cards">
           <div class="data-card" v-for="item in metrics" :key="item.label">
             <div class="card-label">{{ item.label }}</div>
@@ -88,6 +44,16 @@
           </div>
         </div>
       </section>
+
+      <!-- 右侧图表面板 -->
+      <div class="right-wrap">
+        <div class="right-wrap-3d">
+          <PurposeSpecialFunds></PurposeSpecialFunds>
+          <ProportionPopulationConsumption></ProportionPopulationConsumption>
+          <ElectricityUsage></ElectricityUsage>
+          <QuarterlyGrowthSituation></QuarterlyGrowthSituation>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +65,14 @@ import World from '@/components/Earth/World.js'
 import { earth } from '@/config/dataset.js'
 import throttle from 'lodash/throttle'
 import mHeader from '@/components/mHeader/index.vue'
+import BulkCommoditySalesChart from '@/views/gdMap/components/BulkCommoditySalesChart.vue'
+import YearlyEconomyTrend from '@/views/gdMap/components/YearlyEconomyTrend.vue'
+import EconomicTrendChart from '@/views/gdMap/components/EconomicTrendChart.vue'
+import DistrictEconomicIncome from '@/views/gdMap/components/DistrictEconomicIncome.vue'
+import PurposeSpecialFunds from '@/views/gdMap/components/PurposeSpecialFunds.vue'
+import ProportionPopulationConsumption from '@/views/gdMap/components/ProportionPopulationConsumption.vue'
+import ElectricityUsage from '@/views/gdMap/components/ElectricityUsage.vue'
+import QuarterlyGrowthSituation from '@/views/gdMap/components/QuarterlyGrowthSituation.vue'
 
 const router = useRouter()
 const chartRef = ref()
@@ -190,7 +164,6 @@ function init() {
     },
     onZhejiangHover: (screenPos) => {
       if (screenPos) {
-        // 计算相对于 right-section 的位置
         const rect = chartRef.value.getBoundingClientRect()
         zjTooltip.x = screenPos.x - rect.left
         zjTooltip.y = screenPos.y - rect.top - 60
@@ -269,64 +242,71 @@ onUnmounted(() => {
   min-height: 0;
 }
 
-.left-panel {
-  width: 420px;
+// 左侧图表面板
+.left-wrap {
+  width: 398px;
   flex-shrink: 0;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
+  padding: 10px 0 10px 32px;
   z-index: 10;
-}
+  perspective: 500px;
+  perspective-origin: 50% 50%;
+  pointer-events: none;
 
-.glass-card {
-  flex: 1;
-  background: rgba(10, 30, 60, 0.55);
-  border: 1px solid rgba(67, 144, 209, 0.25);
-  border-radius: 8px;
-  padding: 28px 24px;
-  backdrop-filter: blur(12px);
-  display: flex;
-  flex-direction: column;
-}
+  &-3d {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transform: translate3d(0, 0, 0) rotateY(6deg);
 
-.company-header {
-  margin-bottom: 14px;
-  .company-name { font-size: 24px; font-weight: bold; font-style: italic; color: #fff; margin: 0; }
-  .company-sub { font-size: 15px; color: rgba(255, 255, 255, 0.7); margin: 4px 0 0 0; letter-spacing: 3px; }
-}
-
-.company-desc { font-size: 13px; line-height: 1.8; color: rgba(255, 255, 255, 0.65); margin: 0 0 20px 0; }
-
-.tags {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
-  margin-bottom: 24px;
-  .tag-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255, 255, 255, 0.8);
-    .tag-icon { color: #e8a54b; font-size: 14px; }
-  }
-}
-
-.cloud-diagram {
-  flex: 1; display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: 16px;
-  .diagram-layers { display: flex; flex-direction: column; gap: 8px;
-    .layer { padding: 6px 12px; border-radius: 4px; font-size: 11px; color: rgba(255, 255, 255, 0.8);
-      &.layer-top { background: rgba(232, 165, 75, 0.2); border: 1px solid rgba(232, 165, 75, 0.4); }
-      &.layer-mid { background: rgba(67, 144, 209, 0.2); border: 1px solid rgba(67, 144, 209, 0.4); }
-      &.layer-bottom { background: rgba(180, 80, 80, 0.2); border: 1px solid rgba(180, 80, 80, 0.4); }
+    .left-card {
+      flex: 1;
+      margin-bottom: 8px;
+      pointer-events: all;
     }
   }
-  .diagram-arrow { display: flex; flex-direction: column; align-items: center; padding: 10px 14px; background: rgba(232, 165, 75, 0.15); border: 1px solid rgba(232, 165, 75, 0.35); border-radius: 8px;
-    .arrow-text { font-size: 14px; font-weight: bold; color: #e8a54b; }
-    .arrow-sub { font-size: 10px; color: rgba(255, 255, 255, 0.5); margin-top: 4px; }
-  }
-  .diagram-cloud { padding: 14px 20px; background: linear-gradient(135deg, rgba(232, 165, 75, 0.25), rgba(232, 165, 75, 0.1)); border: 1px solid rgba(232, 165, 75, 0.5); border-radius: 8px;
-    .cloud-text { font-size: 20px; font-weight: bold; color: #e8a54b; letter-spacing: 4px; }
+}
+
+// 右侧图表面板
+.right-wrap {
+  width: 398px;
+  flex-shrink: 0;
+  padding: 10px 32px 10px 0;
+  z-index: 10;
+  perspective: 800px;
+  perspective-origin: 50% 50%;
+  pointer-events: none;
+
+  &-3d {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transform: translate3d(0, 0, 0) rotateY(-6deg);
+
+    .right-card {
+      flex: 1;
+      margin-bottom: 8px;
+      pointer-events: all;
+    }
   }
 }
 
-.right-section { flex: 1; position: relative; min-width: 0; }
-.earth-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+// 中间地球区域
+.center-section {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  z-index: 5;
+}
+
+.earth-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 // 浙江省 tooltip
 .zj-tooltip {
@@ -353,18 +333,29 @@ onUnmounted(() => {
   }
 }
 
+// 底部数据指标卡片
 .data-cards {
-  position: absolute; right: 30px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 12px; z-index: 10;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 10;
 }
 
 .data-card {
-  background: rgba(10, 30, 60, 0.5); border: 1px solid rgba(67, 144, 209, 0.3);
-  border-radius: 6px; padding: 12px 24px; min-width: 180px; backdrop-filter: blur(8px); text-align: right;
-  .card-label { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px; }
+  background: rgba(10, 30, 60, 0.6);
+  border: 1px solid rgba(67, 144, 209, 0.3);
+  border-radius: 6px;
+  padding: 10px 20px;
+  min-width: 140px;
+  backdrop-filter: blur(8px);
+  text-align: center;
+  .card-label { font-size: 11px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px; }
   .card-value {
-    .value-num { font-size: 26px; font-weight: bold; background: linear-gradient(180deg, #e8a54b 0%, #f0c87a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
-    .value-unit { font-size: 14px; color: #e8a54b; margin-left: 2px; }
+    .value-num { font-size: 22px; font-weight: bold; background: linear-gradient(180deg, #e8a54b 0%, #f0c87a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+    .value-unit { font-size: 12px; color: #e8a54b; margin-left: 2px; }
   }
 }
 </style>
